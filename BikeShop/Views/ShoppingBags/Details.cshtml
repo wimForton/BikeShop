@@ -1,0 +1,46 @@
+﻿@model BikeShop.Models.ShoppingBag
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ShoppingBag</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.myCustomer.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.myCustomer.Firstname)
+        </dd>
+    </dl>
+    <table class="table">
+        @foreach (ShoppingItem ShoppingBagItem in Model.myShoppingItems)
+        {
+        <tr>
+            <td>Product: </td>
+            <td>@ShoppingBagItem.myProduct.Name</td>
+            <td>@ShoppingBagItem.myProduct.Imagepath</td>
+            <td>Price: </td>
+            <td>@ShoppingBagItem.myProduct.Price</td>
+            <td>Quantity: </td>
+            <td>@ShoppingBagItem.Quantity</td>
+            <td>Total: </td>
+            <td>@(ShoppingBagItem.Quantity * ShoppingBagItem.myProduct.Price)</td>
+        </tr>
+        }
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

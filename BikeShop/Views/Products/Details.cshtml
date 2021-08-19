@@ -1,0 +1,44 @@
+﻿@model BikeShop.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Imagepath)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Imagepath)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+    @using (Html.BeginForm("AddItem", "ShoppingBags"))
+    {
+                <input type="number" name="myQuantity" value="@ViewData["quantity"]"/>
+                <input type="hidden" name="myCustomerId" value="@ViewData["customerId"]"/>
+                <input type="hidden" name="myProductId" value="@Model.Id"/>
+                <input type="submit" value="Buy!"/>
+            }
+    @*@Html.ActionLink("Buy!", "AddItem", "ShoppingBags", new { myProductId = Model.Id, myCustomerId = ViewBag.customerId, myQuantity = ViewBag.quantity }, new { @class = "btn btn-primary" })*@
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
