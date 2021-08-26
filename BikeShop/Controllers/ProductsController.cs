@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BikeShop.Data;
 using BikeShop.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BikeShop.Controllers
 {
@@ -40,8 +41,7 @@ namespace BikeShop.Controllers
 
             return View(await _context.Products.ToListAsync());
         }
-
-        // GET: Products/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

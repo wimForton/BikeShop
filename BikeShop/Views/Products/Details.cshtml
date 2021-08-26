@@ -29,10 +29,9 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
     </dl>
-    @using (Html.BeginForm("AddItem", "ShoppingBags"))
+    @using (Html.BeginForm("AddItem", "ShoppingBags"))@*no customer id since we use the customer that's currently logged in'*@
     {
                 <input type="number" name="myQuantity" value="@ViewData["quantity"]"/>
-                <input type="hidden" name="myCustomerId" value="@ViewData["customerId"]"/>
                 <input type="hidden" name="myProductId" value="@Model.Id"/>
                 <input type="submit" value="Buy!"/>
             }

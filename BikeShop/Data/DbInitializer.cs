@@ -15,23 +15,7 @@ namespace BikeShop.Data
             {
                 return;   // DB has been seeded
             }
-            var shoppingbags = new ShoppingBag[]
-            {
-                new ShoppingBag{ Date = DateTime.Now, myCustomerId = 1 }
-            };
-            foreach (ShoppingBag s in shoppingbags)
-            {
-                context.ShoppingBags.Add(s);
-            }
 
-            var customers = new Customer[]
-            {
-                new Customer{ Firstname = "Wim", myShoppingBags = new List<ShoppingBag>(), Name = "Forton"},
-            };
-            foreach (Customer c in customers)
-            {
-                context.Customers.Add(c);
-            }
             var products = new Product[]
             {
                 new Product{ Name = "Grasmasjiene", Imagepath = "images/Grasmachine.jpg", Price = 150},
@@ -52,15 +36,8 @@ namespace BikeShop.Data
                 p.Imagepath = products[index].Imagepath;
                 p.Price = myRandom.Next(20, 200);
                 context.Products.Add(p);
-
             }
-            //foreach (Product p in products)
-            //{
-            //    context.Products.Add(p);
-            //}
-
             context.SaveChanges();
-
         }
     }
 }

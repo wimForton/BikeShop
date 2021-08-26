@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BikeShop.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using BikeShop.Models;
 
 namespace BikeShop
 {
@@ -27,6 +29,18 @@ namespace BikeShop
         {
             services.AddDbContext<BikeShopContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BikeShopConnection")));
+            ///////////////////////////////////////////////////////////////////////////////////////////////IDframework
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BikeShopContext>()
+                .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+
+            });
 
             //services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -34,7 +48,7 @@ namespace BikeShop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider servicesProvider)
         {
             if (env.IsDevelopment())
             {
@@ -51,6 +65,7 @@ namespace BikeShop
 
             app.UseRouting();
 
+            app.UseAuthentication();//IDframework
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -59,6 +74,50 @@ namespace BikeShop
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            CreateRoles(servicesProvider);
+        }
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            Task<IdentityResult> roleResult;
+
+
+            Task<bool> adminExists = roleManager.RoleExistsAsync("Administrator");
+
+            if (!adminExists.Result)
+            {
+                roleResult = roleManager.CreateAsync(new IdentityRole("Administrator"));
+                roleResult.Wait();
+            }
+
+            //Task<bool> normalExists = roleManager.RoleExistsAsync("NormalUser");
+
+            //if (!normalExists.Result)
+            //{
+            //    roleResult = roleManager.CreateAsync(new IdentityRole("NormalUser"));
+            //    roleResult.Wait();
+            //}
+            string email = "Admin@admin.be";
+            Task<IdentityUser> adminUser = userManager.FindByEmailAsync(email);
+            adminUser.Wait();
+
+            if (adminUser.Result == null)
+            {
+                //create new user
+                IdentityUser admin = new IdentityUser();
+                admin.Email = email;
+                admin.UserName = email;
+
+                Task<IdentityResult> newAdmin = userManager.CreateAsync(admin, "Testje123!");
+                newAdmin.Wait();
+
+                if (newAdmin.Result.Succeeded)
+                {
+                    Task<IdentityResult> adminWithRole = userManager.AddToRoleAsync(admin, "Administrator");
+                    adminWithRole.Wait();
+                }
+            }
         }
     }
 }

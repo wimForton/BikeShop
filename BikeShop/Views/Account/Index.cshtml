@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+
+<p>Acount Index</p>
+@for (int i = 0; i < Model.Count(); i++)
+{
+    List<Microsoft.AspNetCore.Identity.IdentityUser> myAcounts = Model.ToList();
+    @Html.DisplayFor(modelItem => myAcounts[i].Email)
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p></p>
+            </th>
+            <th>
+
+            </th>
+            <th>
+                <p></p>
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            List<Microsoft.AspNetCore.Identity.IdentityUser> myAcounts = Model.ToList();
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => myAcounts[i].UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => myAcounts[i].Email)
+            </td>
+
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@myAcounts[i].Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@myAcounts[i].Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@myAcounts[i].Id">Delete</a>
+            </td>
+            <td>
+                <hr>
+            </td>
+        </tr>
+        }
+    </tbody>
+
+
+</table>

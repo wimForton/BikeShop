@@ -7,25 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BikeShop.Data;
 using BikeShop.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BikeShop.Controllers
 {
     public class ShoppingBagsController : Controller
     {
         private readonly BikeShopContext _context;
-
-        public ShoppingBagsController(BikeShopContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+        public ShoppingBagsController(BikeShopContext context, UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        public IActionResult Create(int myCustomerId)
+        public IActionResult Create()
         {
-            ShoppingBag MyShoppingBag = new ShoppingBag() { myCustomerId = myCustomerId, Date = DateTime.Now };
+            var user = _userManager.FindByNameAsync(User.Identity.Name);///Ophalen user op basis van ingelogde persoon
+            user.Wait();
+            ShoppingBag MyShoppingBag = new ShoppingBag() { IdentityUserId = user.Result.Id, Date = DateTime.Now };
 
             _context.ShoppingBags.Add(MyShoppingBag);
             _context.SaveChanges();
-            return RedirectToAction("Details", "Customers", new { Id = myCustomerId });//new { Id = myCustomerId }
+            return RedirectToAction("Index", "Products");//new { Id = myCustomerId }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -50,7 +54,7 @@ namespace BikeShop.Controllers
             }
 
             var shoppingBag =  _context.ShoppingBags
-                .Include(x => x.myCustomer)
+                .Include(x => x.IdentityUser)
                 .Include(x => x.myShoppingItems)
                 .ThenInclude(x => x.myProduct)//theninclude gaat een niveau dieper, kijkt naar myShoppingItems
                 .FirstOrDefault(x => x.Id == id);
@@ -81,7 +85,7 @@ namespace BikeShop.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, int myCustomerId)
+        public async Task<IActionResult> DeleteConfirmed(int id, int myCustomerId)///myCustomerId niet meer TODO: naar customer
         {
             var shoppingBag = await _context.ShoppingBags.FindAsync(id);
             ///eerst de items uit de bag verwijderen
@@ -94,15 +98,17 @@ namespace BikeShop.Controllers
             
             _context.ShoppingBags.Remove(shoppingBag);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Customers", new { Id = myCustomerId });
+            return RedirectToAction("Details", "Customers", new { Id = myCustomerId });///Bestaat niet meer TODO: naar customer
         }
         public IActionResult Back(int myCustomerId)//terug knop van de delete shoppingbag pagina
         {
-            return RedirectToAction("Details", "Customers", new { Id = myCustomerId });
+            return RedirectToAction("Details", "Customers", new { Id = myCustomerId });///Bestaat niet meer TODO: naar customer
         }
-        public IActionResult AddItem(int myProductId, int myCustomerId, int myQuantity)
+        public IActionResult AddItem(int myProductId, int myQuantity)
         {
-            ShoppingBag myShoppingBag = _context.ShoppingBags.OrderByDescending(x => x.Date).FirstOrDefault(x => x.myCustomerId == myCustomerId);
+            var user = _userManager.FindByNameAsync(User.Identity.Name);///Ophalen user op basis van ingelogde persoon
+            user.Wait();
+            ShoppingBag myShoppingBag = _context.ShoppingBags.OrderByDescending(x => x.Date).FirstOrDefault(x => x.IdentityUserId == user.Result.Id);///shoppingbag ophalen op basis van persoon (laatst aangemaakte)
             //ShoppingBag myShoppingBag = _context.ShoppingBags.LastOrDefault(x => x.myCustomerId == myCustomerId);//.LastOrDefault();
 
             ShoppingItem myShoppingitem = new ShoppingItem();
