@@ -32,6 +32,7 @@ namespace BikeShop.Controllers
         {
             if (ModelState.IsValid == true)
             {
+
                 var user = new IdentityUser { UserName = loginViewModel.UserName, PasswordHash = loginViewModel.Password, Email = loginViewModel.Email };
                 var result = await _userManager.CreateAsync(user, loginViewModel.Password);
 
