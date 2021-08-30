@@ -17,5 +17,6 @@ namespace BikeShop.DAL.Data.Repositories.Product
         public Task AddProduct(ProductModel product);
         public Task UpdateProduct(ProductModel product);
         public Task RemoveProduct(int? id);
+        public bool ProductExists(int id);
     }
 }

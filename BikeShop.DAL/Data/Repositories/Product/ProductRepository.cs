@@ -35,10 +35,13 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 .FirstOrDefaultAsync(m => m.Id == id);
             return product;
         }
+        public bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.Id == id);
+        }
         public async Task AddProduct(ProductModel product)
         {
             _context.Add(product);
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -49,12 +52,10 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 //Message.box(x);
                 throw;
             }
-
         }
         public async Task RemoveProduct(int? id)
         {
             ProductModel product = await GetProductById(id);
-
             try
             {
                 _context.Products.Remove(product);
@@ -65,11 +66,9 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 var x = e.Message;
                 throw;
             }
-
         }
         public async Task UpdateProduct(ProductModel product)
         {
-            
             try
             {
                 _context.Update(product);
@@ -81,7 +80,6 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 //Message.box(x);
                 throw;
             }
-
         }
         public List<ProductModel> GetProductsPage(int advancepage)
         {

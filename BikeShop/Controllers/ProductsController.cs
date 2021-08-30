@@ -23,7 +23,6 @@ namespace BikeShop.Controllers
         {
 
             _ProductService = ProductService;
-            _context = _ProductService.GetContext();//als we klaar zijn mag dees weg
         }
 
         // GET: Products
@@ -100,7 +99,7 @@ namespace BikeShop.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!_ProductService.ProductExists(product.Id))
                     {
                         return NotFound();
                     }
@@ -133,11 +132,6 @@ namespace BikeShop.Controllers
         {
             await _ProductService.RemoveProduct(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
         }
     }
 }
