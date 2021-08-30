@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BikeShop.Data
+namespace BikeShop.DAL.Data
 {
     public class BikeShopContext:IdentityDbContext<IdentityUser>
     {
         //public DbSet<Customer> Customers { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ShoppingBag> ShoppingBags { get; set; }
-        public DbSet<ShoppingItem> ShoppingItems { get; set; }
+        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<ShoppingBagModel> ShoppingBags { get; set; }
+        public DbSet<ShoppingItemModel> ShoppingItems { get; set; }
         public BikeShopContext(DbContextOptions<BikeShopContext> options) : base(options)
         {
         }

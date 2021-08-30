@@ -12,6 +12,8 @@ using BikeShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BikeShop.Models;
+using BikeShop.DAL.Data;
+using DemoMVC.DAL;
 
 namespace BikeShop
 {
@@ -41,6 +43,8 @@ namespace BikeShop
                 options.Password.RequireNonAlphanumeric = false;
 
             });
+            services.RegisterDAL(Configuration);
+
 
             //services.AddDatabaseDeveloperPageExceptionFilter();
 

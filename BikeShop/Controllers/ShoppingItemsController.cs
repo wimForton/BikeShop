@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BikeShop.Data;
 using BikeShop.Models;
+using BikeShop.DAL.Data;
 
 namespace BikeShop.Controllers
 {

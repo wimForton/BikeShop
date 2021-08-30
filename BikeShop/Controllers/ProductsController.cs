@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BikeShop.Data;
 using BikeShop.Models;
 using Microsoft.AspNetCore.Authorization;
+using BikeShop.DAL.Data;
+using BikeShop.DAL.Data.Repositories.Product;
 
 namespace BikeShop.Controllers
 {
@@ -16,47 +18,33 @@ namespace BikeShop.Controllers
         private readonly BikeShopContext _context;
         public static int PageNumber = 1;
         public static int ProductsPerPage = 9;
-
-        public ProductsController(BikeShopContext context)
+        private readonly IProductRepository _ProductService;
+        public ProductsController(IProductRepository ProductService)
         {
-            _context = context;
+
+            _ProductService = ProductService;
+            _context = _ProductService.GetContext();//als we klaar zijn mag dees weg
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(int advancepage = 0)
+        public IActionResult Index(int advancepage = 0)
         {
-
-            ProductsController.PageNumber += advancepage;
-            if(ProductsController.PageNumber < 1)
-            {
-                ProductsController.PageNumber = 1;
-            }
-            if (ProductsController.PageNumber > _context.Products.Count() / ProductsController.ProductsPerPage)
-            {
-                ProductsController.PageNumber = _context.Products.Count() / ProductsController.ProductsPerPage;
-            }
-            ViewData["pagenumber"] = ProductsController.PageNumber;
-            ViewData["firstproduct"] = (ProductsController.PageNumber - 1) * ProductsController.ProductsPerPage;
-            ViewData["productsperpage"] = ProductsController.ProductsPerPage;
-
-            return View(await _context.Products.ToListAsync());
+            List<ProductModel> onePageList = _ProductService.GetProductsPage(advancepage);
+            ViewData["pagenumber"] = _ProductService.GetPageNumber();
+            return View(onePageList);
         }
         [Authorize]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewData["customerId"] = 1;
+
             ViewData["quantity"] = 1;
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+
+            ProductModel product = await _ProductService.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            
             return View(product);
         }
 
@@ -65,19 +53,17 @@ namespace BikeShop.Controllers
         {
             return View();
         }
-
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Imagepath,Price")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Imagepath,Price")] ProductModel product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await _ProductService.AddProduct(product);
+                return RedirectToAction(nameof(Index));//fancy way om niet harcoded "index" te moeten schrijven
             }
             return View(product);
         }
@@ -85,12 +71,8 @@ namespace BikeShop.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _ProductService.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -103,7 +85,7 @@ namespace BikeShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Imagepath,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Imagepath,Price")] ProductModel product)
         {
             if (id != product.Id)
             {
@@ -114,8 +96,7 @@ namespace BikeShop.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    await _ProductService.UpdateProduct(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -136,13 +117,7 @@ namespace BikeShop.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _ProductService.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -156,9 +131,7 @@ namespace BikeShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            await _ProductService.RemoveProduct(id);
             return RedirectToAction(nameof(Index));
         }
 

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BikeShop.Models
 {
-    public class ShoppingBag
+    public class ShoppingBagModel
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public List<ShoppingItem> myShoppingItems { get; set; }
+        public List<ShoppingItemModel> myShoppingItems { get; set; }
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
     }

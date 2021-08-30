@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BikeShop.Data;
 using Microsoft.Extensions.DependencyInjection;
+using BikeShop.DAL.Data;
 
 namespace BikeShop
 {

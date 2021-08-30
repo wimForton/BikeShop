@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BikeShop.Migrations
+namespace BikeShop.DAL.Migrations
 {
-    public partial class authorize : Migration
+    public partial class ProductId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -194,15 +194,15 @@ namespace BikeShop.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Productid = table.Column<int>(type: "int", nullable: false),
+                    myProductid = table.Column<int>(type: "int", nullable: false),
                     myShoppingBagId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShoppingItems_Products_Productid",
-                        column: x => x.Productid,
+                        name: "FK_ShoppingItems_Products_myProductid",
+                        column: x => x.myProductid,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -259,14 +259,14 @@ namespace BikeShop.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShoppingItems_myProductid",
+                table: "ShoppingItems",
+                column: "myProductid");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingItems_myShoppingBagId",
                 table: "ShoppingItems",
                 column: "myShoppingBagId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingItems_Productid",
-                table: "ShoppingItems",
-                column: "Productid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

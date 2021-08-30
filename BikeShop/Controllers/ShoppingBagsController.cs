@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BikeShop.Data;
 using BikeShop.Models;
 using Microsoft.AspNetCore.Identity;
+using BikeShop.DAL.Data;
 
 namespace BikeShop.Controllers
 {
@@ -25,7 +26,7 @@ namespace BikeShop.Controllers
         {
             var user = _userManager.FindByNameAsync(User.Identity.Name);///Ophalen user op basis van ingelogde persoon
             user.Wait();
-            ShoppingBag MyShoppingBag = new ShoppingBag() { IdentityUserId = user.Result.Id, Date = DateTime.Now };
+            ShoppingBagModel MyShoppingBag = new ShoppingBagModel() { IdentityUserId = user.Result.Id, Date = DateTime.Now };
 
             _context.ShoppingBags.Add(MyShoppingBag);
             _context.SaveChanges();
@@ -108,11 +109,11 @@ namespace BikeShop.Controllers
         {
             var user = _userManager.FindByNameAsync(User.Identity.Name);///Ophalen user op basis van ingelogde persoon
             user.Wait();
-            ShoppingBag myShoppingBag = _context.ShoppingBags.OrderByDescending(x => x.Date).FirstOrDefault(x => x.IdentityUserId == user.Result.Id);///shoppingbag ophalen op basis van persoon (laatst aangemaakte)
+            ShoppingBagModel myShoppingBag = _context.ShoppingBags.OrderByDescending(x => x.Date).FirstOrDefault(x => x.IdentityUserId == user.Result.Id);///shoppingbag ophalen op basis van persoon (laatst aangemaakte)
             //ShoppingBag myShoppingBag = _context.ShoppingBags.LastOrDefault(x => x.myCustomerId == myCustomerId);//.LastOrDefault();
 
-            ShoppingItem myShoppingitem = new ShoppingItem();
-            myShoppingitem.Productid = myProductId;
+            ShoppingItemModel myShoppingitem = new ShoppingItemModel();
+            myShoppingitem.myProductid = myProductId;
             myShoppingitem.myShoppingBagId = myShoppingBag.Id;
             myShoppingitem.Quantity = myQuantity;//TODO
 
@@ -121,7 +122,6 @@ namespace BikeShop.Controllers
 
             _context.SaveChanges();
 
-            //return View(myShoppingBag);
             return RedirectToAction("Details", "ShoppingBags", new { Id = myShoppingBag.Id });
         }
     }

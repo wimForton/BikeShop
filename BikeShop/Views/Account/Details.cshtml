@@ -1,0 +1,35 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.UserName)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayFor(model => model.UserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+<p>Shoppingbags</p>
+<tbody>
+    @foreach (ShoppingBagModel item in ViewData["shoppingBags"] as List<ShoppingBagModel>)
+    {
+        <tr>
+            <td>
+            @item.Date
+            </td>
+        </tr>
+    }
+
+</tbody>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

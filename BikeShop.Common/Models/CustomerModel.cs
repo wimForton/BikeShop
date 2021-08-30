@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BikeShop.Models
 {
-    public class Customer
+    public class CustomerModel
     {
         public IdentityUser IdentityUser { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Firstname { get; set; }
-        public List<ShoppingBag> myShoppingBags { get; set; }
+        public List<ShoppingBagModel> myShoppingBags { get; set; }
     }
 }

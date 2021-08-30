@@ -1,4 +1,4 @@
-﻿@model BikeShop.Models.ShoppingBag
+﻿@model BikeShop.Models.ShoppingBagModel
 
 @{
     ViewData["Title"] = "Details";
@@ -21,7 +21,7 @@
         </dt>
     </dl>
     <table class="table">
-        @foreach (ShoppingItem ShoppingBagItem in Model.myShoppingItems)
+        @foreach (ShoppingItemModel ShoppingBagItem in Model.myShoppingItems)
         {
         <tr>
             <td>Product: </td>

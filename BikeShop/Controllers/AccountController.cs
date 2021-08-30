@@ -1,8 +1,10 @@
-﻿using BikeShop.Data;
+﻿using BikeShop.DAL.Data;
+using BikeShop.Data;
 using BikeShop.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,6 +30,16 @@ namespace BikeShop.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Details(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            List<ShoppingBagModel> myShoppingBags = _context.ShoppingBags.Where(x => x.IdentityUserId == user.Id).ToList();
+
+            ViewData["shoppingBags"] = myShoppingBags;
+
+            return View(user);
+        }
         public async Task<IActionResult> RegisterUser(LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid == true)
@@ -39,7 +51,7 @@ namespace BikeShop.Controllers
                 if (result.Succeeded)
                 {
                     //Hier maken we de shoppingbag en voegen ze toe aan de db
-                    _context.ShoppingBags.Add(new ShoppingBag { IdentityUserId = user.Id, Date = System.DateTime.Now });
+                    _context.ShoppingBags.Add(new ShoppingBagModel { IdentityUserId = user.Id, Date = System.DateTime.Now });
                     _context.SaveChanges();
                     return View("Login");
                 }
@@ -73,6 +85,7 @@ namespace BikeShop.Controllers
             }
             return View("Login", login);
         }
+
         public async Task<IActionResult> LogoutAsync()
         {
             await _signInManager.SignOutAsync();
@@ -103,7 +116,7 @@ namespace BikeShop.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var account = await _context.Users.FindAsync(id);
-            ShoppingBag myShoppingBag = _context.ShoppingBags.FirstOrDefault(x => x.IdentityUserId == account.Id);
+            ShoppingBagModel myShoppingBag = _context.ShoppingBags.FirstOrDefault(x => x.IdentityUserId == account.Id);
             while (myShoppingBag != null)
             {
                 _context.ShoppingBags.Remove(myShoppingBag);
