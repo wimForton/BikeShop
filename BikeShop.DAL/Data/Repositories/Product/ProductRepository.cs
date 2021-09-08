@@ -23,15 +23,17 @@ namespace BikeShop.DAL.Data.Repositories.Product
         }
         public IEnumerable<ProductModel> GetProducts()
         {
-            return _context.Products;
+            var x = _context.Products.Include(x => x.Discounts);
+            return x;
         }
-        public async Task<ProductModel> GetProductById(int? id)
+        public async Task<ProductModel> GetProductByIdAsync(int? id)
         {
             if (id == null)
             {
                 return null;
             }
             var product = await _context.Products
+                .Include(x => x.Discounts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             return product;
         }
@@ -39,7 +41,7 @@ namespace BikeShop.DAL.Data.Repositories.Product
         {
             return _context.Products.Any(e => e.Id == id);
         }
-        public async Task AddProduct(ProductModel product)
+        public async Task AddProductAsync(ProductModel product)
         {
             _context.Add(product);
             try
@@ -53,9 +55,9 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 throw;
             }
         }
-        public async Task RemoveProduct(int? id)
+        public async Task RemoveProductAsync(int? id)
         {
-            ProductModel product = await GetProductById(id);
+            ProductModel product = await GetProductByIdAsync(id);
             try
             {
                 _context.Products.Remove(product);
@@ -67,7 +69,7 @@ namespace BikeShop.DAL.Data.Repositories.Product
                 throw;
             }
         }
-        public async Task UpdateProduct(ProductModel product)
+        public async Task UpdateProductAsync(ProductModel product)
         {
             try
             {
@@ -92,7 +94,8 @@ namespace BikeShop.DAL.Data.Repositories.Product
             {
                 ProductRepository.PageNumber = _context.Products.Count() / ProductRepository.ProductsPerPage + 1;
             }
-            return _context.Products.Skip((ProductRepository.PageNumber - 1) * ProductRepository.ProductsPerPage).Take(ProductRepository.ProductsPerPage).ToList();
+            var x = _context.Products.Include(x => x.Discounts);
+            return x.Skip((ProductRepository.PageNumber - 1) * ProductRepository.ProductsPerPage).Take(ProductRepository.ProductsPerPage).ToList();
         }
         public int GetPageNumber()
         {

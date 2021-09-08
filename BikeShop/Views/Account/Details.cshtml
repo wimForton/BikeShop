@@ -19,17 +19,26 @@
     </dl>
 </div>
 <p>Shoppingbags</p>
-<tbody>
-    @foreach (ShoppingBagModel item in ViewData["shoppingBags"] as List<ShoppingBagModel>)
-    {
-        <tr>
-            <td>
-            @item.Date
-            </td>
-        </tr>
-    }
+<a class="nav-link text-dark" asp-area="" asp-controller="ShoppingBags" asp-action="Create" asp-route-userName="@Model.UserName">Add shoppingbag</a>
+<table class="table">
+    <tbody>
+        @foreach (ShoppingBagModel item in ViewData["shoppingBags"] as List<ShoppingBagModel>)
+        {
+            <tr>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-area="" asp-controller="ShoppingBags" asp-action="Details" asp-route-id="@item.Id">Check shoppingbag</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-area="" asp-controller="ShoppingBags" asp-action="Delete" asp-route-id="@item.Id">Delete shoppingbag</a>
+                </td>
+            </tr>
+        }
 
-</tbody>
+    </tbody>
+</table>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>

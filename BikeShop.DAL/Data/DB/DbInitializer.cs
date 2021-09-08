@@ -36,6 +36,14 @@ namespace BikeShop.Data
                 p.Name = products[index].Name;
                 p.Imagepath = products[index].Imagepath;
                 p.Price = myRandom.Next(20, 200);
+                DiscountModel discount = new DiscountModel();
+                discount.MinimumPurchase = 3;
+                discount.DiscountPercentage = 95;
+                p.Discounts.Add(discount);
+                DiscountModel discount2 = new DiscountModel();
+                discount2.MinimumPurchase = 6;
+                discount2.DiscountPercentage = 90;
+                p.Discounts.Add(discount2);
                 context.Products.Add(p);
             }
             context.SaveChanges();

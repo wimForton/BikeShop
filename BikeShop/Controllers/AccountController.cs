@@ -1,4 +1,5 @@
 ﻿using BikeShop.DAL.Data;
+using BikeShop.DAL.Data.Repositories.Account;
 using BikeShop.Data;
 using BikeShop.Models;
 using Microsoft.AspNetCore.Identity;
@@ -15,16 +16,18 @@ namespace BikeShop.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly BikeShopContext _context;
+        private readonly IAccountRepository _AccountService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, BikeShopContext context)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, BikeShopContext context, IAccountRepository AccountService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _AccountService = AccountService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(_AccountService.GetAccounts());
         }
         public IActionResult Register()
         {
@@ -32,9 +35,14 @@ namespace BikeShop.Controllers
         }
         public async Task<IActionResult> Details(string id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            List<ShoppingBagModel> myShoppingBags = _context.ShoppingBags.Where(x => x.IdentityUserId == user.Id).ToList();
+            string myAccountId = id;
+            var user = await _AccountService.GetAccountByIdAsync(myAccountId);
+            if (myAccountId == "-1")
+            {
+                user = await _userManager.FindByNameAsync(User.Identity.Name);
+            }
+            //var user = await _AccountService.GetAccountByIdAsync(myAccountId);
+            List<ShoppingBagModel> myShoppingBags = _AccountService.GetShoppingBagsByAccount(user);
 
             ViewData["shoppingBags"] = myShoppingBags;
 
@@ -44,23 +52,11 @@ namespace BikeShop.Controllers
         {
             if (ModelState.IsValid == true)
             {
+                bool userRegistered = await _AccountService.RegisterUserAsync(loginViewModel);
 
-                var user = new IdentityUser { UserName = loginViewModel.UserName, PasswordHash = loginViewModel.Password, Email = loginViewModel.Email };
-                var result = await _userManager.CreateAsync(user, loginViewModel.Password);
-
-                if (result.Succeeded)
+                if (userRegistered)
                 {
-                    //Hier maken we de shoppingbag en voegen ze toe aan de db
-                    _context.ShoppingBags.Add(new ShoppingBagModel { IdentityUserId = user.Id, Date = System.DateTime.Now });
-                    _context.SaveChanges();
                     return View("Login");
-                }
-                else
-                {
-                    //what if the user couldn't be added?
-                    //logging
-                    //exception handling
-                    //...
                 }
             }
             return View("register", loginViewModel);
@@ -73,7 +69,8 @@ namespace BikeShop.Controllers
         {
             if (ModelState.IsValid == true)
             {
-                var user = await _userManager.FindByNameAsync(login.UserName);
+                //var user = await _userManager.FindByNameAsync(login.UserName);
+                var user = await _AccountService.GetAccountByNameAsync(login.UserName);
                 if (user != null)
                 {
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, login.Password, true, false);
@@ -99,9 +96,8 @@ namespace BikeShop.Controllers
                 return NotFound();
             }
 
-            var account = await _context.Users.FindAsync(id);
-            //.FindByIdAsync(userId);
-            //.FirstOrDefault(m => m.Id == id);
+            //var account = await _context.Users.FindAsync(id);
+            var account = await _AccountService.GetAccountByIdAsync(id);
             if (account == null)
             {
                 return NotFound();
@@ -115,16 +111,10 @@ namespace BikeShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var account = await _context.Users.FindAsync(id);
-            ShoppingBagModel myShoppingBag = _context.ShoppingBags.FirstOrDefault(x => x.IdentityUserId == account.Id);
-            while (myShoppingBag != null)
+            if (!await _AccountService.DeleteUserAsync(id))
             {
-                _context.ShoppingBags.Remove(myShoppingBag);
-                await _context.SaveChangesAsync();
-                myShoppingBag = _context.ShoppingBags.FirstOrDefault(x => x.IdentityUserId == account.Id);///shoppingbag ophalen op basis van persoon
+                //that went wrong
             }
-            _context.Users.Remove(account);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

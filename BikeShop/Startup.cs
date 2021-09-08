@@ -36,6 +36,8 @@ namespace BikeShop
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BikeShopContext>()
                 .AddDefaultTokenProviders();
+                //.AddSignInManager<SignInManager<IdentityUser>>();//testje
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -76,7 +78,7 @@ namespace BikeShop
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Products}/{action=Index}/{id?}");///was controller = Home
             });
             CreateRoles(servicesProvider);
         }

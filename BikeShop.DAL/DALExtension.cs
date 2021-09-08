@@ -1,5 +1,8 @@
 ﻿using BikeShop.DAL.Data;
+using BikeShop.DAL.Data.Repositories.Account;
 using BikeShop.DAL.Data.Repositories.Product;
+using BikeShop.DAL.Data.Repositories.ShoppingBag;
+using BikeShop.DAL.Data.Repositories.SiteConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +17,10 @@ namespace DemoMVC.DAL
             services.AddDbContext<BikeShopContext>(options => options.UseSqlServer(configuration.GetConnectionString("BikeShopConnection")));
 
 
-
-
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
+            services.AddTransient<IShoppingBagRepository, ShoppingBagRepository>();
+            services.AddTransient<ISiteConfigRepository, SiteConfigRepository>();
 
             return services;
         }

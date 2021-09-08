@@ -31,13 +31,19 @@
             <td>@ShoppingBagItem.myProduct.Price</td>
             <td>Quantity: </td>
             <td>@ShoppingBagItem.Quantity</td>
+            @foreach (var discountItem in ShoppingBagItem.myProduct.Discounts)
+            {
+                <td>If you buy: @discountItem.MinimumPurchase items discount is: @discountItem.DiscountPercentage percent</td>
+            }
+
             <td>Total: </td>
             <td>@(ShoppingBagItem.Quantity * ShoppingBagItem.myProduct.Price)</td>
+            <td><a class="btn btn-primary" asp-controller="ShoppingBags" asp-action="RemoveItem" asp-route-myItemId="@ShoppingBagItem.Id" asp-route-myShoppingBagId="@Model.Id">Remove</a></td>
+
         </tr>
         }
     </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-controller="Account" asp-action="Details" asp-route-id="@Model.IdentityUserId">Back</a>
 </div>

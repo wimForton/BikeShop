@@ -15,7 +15,6 @@ namespace BikeShop.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly BikeShopContext _context;
         public static int PageNumber = 1;
         public static int ProductsPerPage = 9;
         private readonly IProductRepository _ProductService;
@@ -38,7 +37,7 @@ namespace BikeShop.Controllers
 
             ViewData["quantity"] = 1;
 
-            ProductModel product = await _ProductService.GetProductById(id);
+            ProductModel product = await _ProductService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -61,7 +60,7 @@ namespace BikeShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _ProductService.AddProduct(product);
+                await _ProductService.AddProductAsync(product);
                 return RedirectToAction(nameof(Index));//fancy way om niet harcoded "index" te moeten schrijven
             }
             return View(product);
@@ -71,7 +70,7 @@ namespace BikeShop.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
-            var product = await _ProductService.GetProductById(id);
+            var product = await _ProductService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -95,7 +94,7 @@ namespace BikeShop.Controllers
             {
                 try
                 {
-                    await _ProductService.UpdateProduct(product);
+                    await _ProductService.UpdateProductAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +115,7 @@ namespace BikeShop.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var product = await _ProductService.GetProductById(id);
+            var product = await _ProductService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -130,7 +129,7 @@ namespace BikeShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _ProductService.RemoveProduct(id);
+            await _ProductService.RemoveProductAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

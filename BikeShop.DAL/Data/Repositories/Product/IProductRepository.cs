@@ -12,11 +12,11 @@ namespace BikeShop.DAL.Data.Repositories.Product
         public IEnumerable<ProductModel> GetProducts();
         public List<ProductModel> GetProductsPage(int advancepage);
         public BikeShopContext GetContext();
-        public Task<ProductModel> GetProductById(int? id);
+        public Task<ProductModel> GetProductByIdAsync(int? id);
         public int GetPageNumber();
-        public Task AddProduct(ProductModel product);
-        public Task UpdateProduct(ProductModel product);
-        public Task RemoveProduct(int? id);
+        public Task AddProductAsync(ProductModel product);
+        public Task UpdateProductAsync(ProductModel product);
+        public Task RemoveProductAsync(int? id);
         public bool ProductExists(int id);
     }
 }

@@ -8,6 +8,8 @@ namespace BikeShop.Models
     public class ProductModel
     {
         public int Id { get; set; }
+        public string SerialNumber { get; set; }
+        public List<DiscountModel> Discounts { get; set; } = new List<DiscountModel>();
         public string Name { get; set; }
         public string Imagepath { get; set; }
         public double Price { get; set; }
