@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BikeShop.DAL.Data.Repositories.Product
+namespace BikeShop.BLL.Services.Products
 {
-    public interface IProductRepository
+    public interface IProductsService
     {
         public IEnumerable<ProductModel> GetProducts();
         public List<ProductModel> GetProductsPage(int advancepage);
-        //public BikeShopContext GetContext();
         public Task<ProductModel> GetProductByIdAsync(int? id);
         public int GetPageNumber();
         public Task AddProductAsync(ProductModel product);

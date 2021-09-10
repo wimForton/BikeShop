@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BikeShop.DAL.Data.Repositories.ShoppingBag
+namespace BikeShop.BLL.Services.ShoppingBags
 {
-    public interface IShoppingBagRepository
+    public interface IShoppingBagsService
     {
-        //public void CreateShoppingBag(string userName);
         public Task CreateShoppingBagAsync(string userName);
         public Task<ShoppingBagModel> GetShoppingBagByIdAsync(int? id);
         public Task<ShoppingBagModel> GetShoppingBagWithDataByIdAsync(int? id);

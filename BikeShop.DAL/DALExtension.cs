@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DemoMVC.DAL
+namespace Bikeshop.DAL
 {
     public static class DALExtension
     {
@@ -21,6 +21,17 @@ namespace DemoMVC.DAL
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IShoppingBagRepository, ShoppingBagRepository>();
             services.AddTransient<ISiteConfigRepository, SiteConfigRepository>();
+
+
+            //.AddSignInManager<SignInManager<IdentityUser>>();//testje
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+
+            });
 
             return services;
         }

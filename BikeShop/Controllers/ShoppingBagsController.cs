@@ -10,6 +10,7 @@ using BikeShop.Models;
 using Microsoft.AspNetCore.Identity;
 using BikeShop.DAL.Data;
 using BikeShop.DAL.Data.Repositories.ShoppingBag;
+using BikeShop.BLL.Services.ShoppingBags;
 
 namespace BikeShop.Controllers
 {
@@ -17,8 +18,8 @@ namespace BikeShop.Controllers
     {
         private readonly BikeShopContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IShoppingBagRepository _ShoppingBagService;
-        public ShoppingBagsController(BikeShopContext context, UserManager<IdentityUser> userManager, IShoppingBagRepository ShoppingBagService)
+        private readonly IShoppingBagsService _ShoppingBagService;
+        public ShoppingBagsController(BikeShopContext context, UserManager<IdentityUser> userManager, IShoppingBagsService ShoppingBagService)
         {
             _userManager = userManager;
             _context = context;
@@ -27,7 +28,7 @@ namespace BikeShop.Controllers
 
         public async Task<IActionResult> Create(string userName)
         {
-            await _ShoppingBagService.CreateShoppingBag(userName);
+            await _ShoppingBagService.CreateShoppingBagAsync(userName);
             var user = await _userManager.FindByNameAsync(userName);//Dit moeten we doen omdat User.Identity.Name op zich niet veilig is en geen id weergeeft
 
             return RedirectToAction("Details", "Account", new { id = user.Id });

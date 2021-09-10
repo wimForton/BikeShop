@@ -1,4 +1,5 @@
-﻿using BikeShop.DAL.Data;
+﻿using BikeShop.BLL.Services.Account;
+using BikeShop.DAL.Data;
 using BikeShop.DAL.Data.Repositories.Account;
 using BikeShop.Data;
 using BikeShop.Models;
@@ -16,9 +17,9 @@ namespace BikeShop.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly BikeShopContext _context;
-        private readonly IAccountRepository _AccountService;
+        private readonly IAccountService _AccountService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, BikeShopContext context, IAccountRepository AccountService)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, BikeShopContext context, IAccountService AccountService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

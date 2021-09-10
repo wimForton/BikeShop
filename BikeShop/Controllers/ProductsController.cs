@@ -10,6 +10,7 @@ using BikeShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using BikeShop.DAL.Data;
 using BikeShop.DAL.Data.Repositories.Product;
+using BikeShop.BLL.Services.Products;
 
 namespace BikeShop.Controllers
 {
@@ -17,8 +18,8 @@ namespace BikeShop.Controllers
     {
         public static int PageNumber = 1;
         public static int ProductsPerPage = 9;
-        private readonly IProductRepository _ProductService;
-        public ProductsController(IProductRepository ProductService)
+        private readonly IProductsService _ProductService;
+        public ProductsController(IProductsService ProductService)
         {
 
             _ProductService = ProductService;

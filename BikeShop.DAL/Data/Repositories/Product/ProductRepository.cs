@@ -17,10 +17,10 @@ namespace BikeShop.DAL.Data.Repositories.Product
         {
             _context = context;
         }
-        public BikeShopContext GetContext()
-        {
-            return _context;
-        }
+        //public BikeShopContext GetContext()
+        //{
+        //    return _context;
+        //}
         public IEnumerable<ProductModel> GetProducts()
         {
             var x = _context.Products.Include(x => x.Discounts);

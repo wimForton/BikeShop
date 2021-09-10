@@ -19,7 +19,7 @@ namespace BikeShop.DAL.Data.Repositories.ShoppingBag
             _context = context;
             _userManager = userManager;
         }
-        public async Task CreateShoppingBag(string userName)
+        public async Task CreateShoppingBagAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);///Ophalen user op basis van ingelogde persoon
             //user.Wait();

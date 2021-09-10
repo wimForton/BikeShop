@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BikeShop.BLL\BikeShop.BLL.csproj" />
     <ProjectReference Include="..\BikeShop.Common\BikeShop.Common.csproj" />
-    <ProjectReference Include="..\BikeShop.DAL\BikeShop.DAL.csproj" />
   </ItemGroup>
 
 </Project>

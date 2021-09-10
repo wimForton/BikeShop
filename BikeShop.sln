@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShop", "BikeShop\BikeShop.csproj", "{20947427-B0F6-4241-8AD2-E990DB203017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeShop.DAL", "BikeShop.DAL\BikeShop.DAL.csproj", "{5879A14C-4EBA-4DBF-AA66-18837D96FD64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShop.DAL", "BikeShop.DAL\BikeShop.DAL.csproj", "{5879A14C-4EBA-4DBF-AA66-18837D96FD64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeShop.BLL", "BikeShop.BLL\BikeShop.BLL.csproj", "{1569805D-DD45-4AFF-94A1-8678CD42A4DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShop.BLL", "BikeShop.BLL\BikeShop.BLL.csproj", "{1569805D-DD45-4AFF-94A1-8678CD42A4DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeShop.Common", "BikeShop.Common\BikeShop.Common.csproj", "{B3F3E2F8-4DA2-44D0-825F-26C14C7D96AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeShop.Common", "BikeShop.Common\BikeShop.Common.csproj", "{B3F3E2F8-4DA2-44D0-825F-26C14C7D96AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeShop.API", "BikeShop.API\BikeShop.API.csproj", "{8E07CDBD-F8C1-48E1-B67D-EF7448FF4E46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B3F3E2F8-4DA2-44D0-825F-26C14C7D96AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3F3E2F8-4DA2-44D0-825F-26C14C7D96AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3F3E2F8-4DA2-44D0-825F-26C14C7D96AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E07CDBD-F8C1-48E1-B67D-EF7448FF4E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E07CDBD-F8C1-48E1-B67D-EF7448FF4E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E07CDBD-F8C1-48E1-B67D-EF7448FF4E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E07CDBD-F8C1-48E1-B67D-EF7448FF4E46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
